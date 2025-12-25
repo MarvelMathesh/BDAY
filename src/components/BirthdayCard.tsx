@@ -48,9 +48,9 @@ export function BirthdayCard({
   const [isHovered, setIsHovered] = useState(false);
 
   // Card Width is 1.0 (4 * 0.25).
-  // Desktop: 0.65 distance (was 0.40) to clearly show full content.
-  // Mobile: 0.8 distance ensures it fits portrait width.
-  const activeDistance = isMobile ? 0.8 : 0.65;
+  // Desktop: 0.65 distance to clearly show full content.
+  // Mobile: 1.4 distance (increased from 0.8) to fit full width in portrait mode.
+  const activeDistance = isMobile ? 1.4 : 0.65;
   const yFloor = 0.5;
 
   useCursor(isHovered || isActive, "pointer");

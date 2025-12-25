@@ -37,6 +37,17 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     const [backgroundOpacity, setBackgroundOpacity] = useState(1);
     const [environmentProgress, setEnvironmentProgress] = useState(0);
     const [hasAnimationCompleted, setHasAnimationCompleted] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.matchMedia("(max-width: 768px)").matches ||
+                /Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Microphone Logic
     // Only listen when the animation is done and candle is lit
@@ -105,6 +116,12 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
         setActiveCardId(prev => prev === id ? null : id);
     }, []);
 
+    const triggerInteraction = useCallback(() => {
+        if (isCandleLit) {
+            blowCandle();
+        }
+    }, [isCandleLit, blowCandle]);
+
     const value = {
         hasStarted,
         isPlaying, // This essentially matches 'sceneStarted' from original
@@ -113,7 +130,11 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
         activeCardId,
         backgroundOpacity,
         environmentProgress,
+        isMobile,
+        micVolume,
+        micPermission: false, // Stubbed since we removed it
         startExperience,
+        triggerInteraction,
         blowCandle,
         toggleCard,
         setBackgroundOpacity,

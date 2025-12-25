@@ -78,7 +78,7 @@ export function Overlay() {
                 // Make sure hint itself doesn't block clicks from bubbling if overlay covers it, 
                 // though overlay is mostly faded out here.
                 >
-                    {isMobile ? "Make a wish and tap to blow the candle" : "Make a wish and press [Space] to blow the candle"}
+                    {isMobile ? "Tap to blow the candle" : "Make a wish and press [Space] to blow the candle"}
                 </div>
             )}
         </>

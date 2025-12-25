@@ -43,13 +43,6 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     const shouldListenToMic = hasAnimationCompleted && isCandleLit;
     const { volume: micVolume, hasPermission: micPermission, requestAccess: requestMicAccess } = useMicInput(shouldListenToMic);
 
-    // Trigger blow candle if volume exceeds threshold
-    useEffect(() => {
-        if (shouldListenToMic && micVolume > 0.5) { // 0.5 is a reasonable threshold after normalization
-            blowCandle();
-        }
-    }, [micVolume, shouldListenToMic, blowCandle]);
-
 
     const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -100,6 +93,13 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
             setFireworksActive(true);
         }
     }, [hasAnimationCompleted, isCandleLit]);
+
+    // Trigger blow candle if volume exceeds threshold
+    useEffect(() => {
+        if (shouldListenToMic && micVolume > 0.5) {
+            blowCandle();
+        }
+    }, [micVolume, shouldListenToMic, blowCandle]);
 
     const toggleCard = useCallback((id: string | null) => {
         setActiveCardId(prev => prev === id ? null : id);

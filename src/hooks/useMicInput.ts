@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 export function useMicInput(isActive: boolean) {
     const [volume, setVolume] = useState(0);

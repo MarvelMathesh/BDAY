@@ -5,11 +5,11 @@ const TYPED_LINES = [
     "...",
     "> today is your birthday",
     "...",
-    "> so i made you this computer program",
+    "> so i made you this website",
     "...",
     "> ٩(◕‿◕)۶ ٩(◕‿◕)۶ ٩(◕‿◕)۶",
     "> ",
-    "> press [space] to enter"
+    "> press [space]/[Tap] to enter"
 ];
 
 const TYPED_CHAR_DELAY = 50; // Faster typing for modern feel

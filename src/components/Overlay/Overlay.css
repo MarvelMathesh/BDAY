@@ -1,0 +1,96 @@
+.overlay-container {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: #050505;
+    color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease-in-out;
+}
+
+.intro-wrapper {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    font-family: 'Courier New', Courier, monospace;
+    /* Placeholder for modern font later */
+    font-size: 1.5rem;
+    line-height: 1.6;
+}
+
+.typed-line {
+    min-height: 1.6em;
+}
+
+.cursor {
+    display: inline-block;
+    color: var(--color-accent, #ff0055);
+    margin-left: 2px;
+}
+
+.hint-text {
+    position: absolute;
+    bottom: 3rem;
+    width: 100%;
+    text-align: center;
+    font-family: system-ui, sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.2rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+    z-index: 5;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.fade-in {
+    animation: fadeIn 2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mobile-tap-hint {
+    margin-top: 2rem;
+    font-size: 1rem;
+    opacity: 0.7;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .intro-wrapper {
+        font-size: 1.1rem;
+        padding: 1.5rem;
+    }
+
+    .hint-text {
+        bottom: 20%;
+        /* Move up on mobile to avoid thumb/hand obscuring */
+        font-size: 1.25rem;
+        width: 80%;
+        left: 10%;
+    }
+}

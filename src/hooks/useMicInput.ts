@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 export function useMicInput(isActive: boolean) {
     const [volume, setVolume] = useState(0);
@@ -39,8 +39,8 @@ export function useMicInput(isActive: boolean) {
                 const average = sum / bufferLength;
 
                 // Normalize 0-1 (roughly, though 255 is max)
-                // Sensitivity adjustment: divided by 50 to make it easier to trigger
-                setVolume(Math.min(average / 40, 1.5));
+                // Sensitivity adjustment: divided by 20 to make it easier to trigger
+                setVolume(Math.min(average / 20, 1.5));
 
                 rafRef.current = requestAnimationFrame(updateVolume);
             };
@@ -72,5 +72,22 @@ export function useMicInput(isActive: boolean) {
         return () => stopListening();
     }, [isActive, startListening, stopListening]);
 
-    return { volume, hasPermission };
+    const requestAccess = useCallback(async () => {
+        if (hasPermission) return;
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            setHasPermission(true);
+            // We can keep the stream open or close it. 
+            // If we close, we need to reopen later. 
+            // Better to just let startListening handle the persistent stream if active.
+            // But for 'priming', we might just want to get the permission bit flipped.
+
+            // Actually, if we just want to ensure permission, we can do this:
+            stream.getTracks().forEach(t => t.stop());
+        } catch (e) {
+            console.error("Mic permission denied");
+        }
+    }, [hasPermission]);
+
+    return { volume, hasPermission, requestAccess };
 }

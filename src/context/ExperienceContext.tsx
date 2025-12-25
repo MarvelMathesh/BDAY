@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
 import type { ReactNode } from "react";
+import { useMicInput } from "../hooks/useMicInput";
 
 type ExperienceState = {
     isPlaying: boolean;
@@ -37,6 +38,19 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     const [environmentProgress, setEnvironmentProgress] = useState(0);
     const [hasAnimationCompleted, setHasAnimationCompleted] = useState(false);
 
+    // Microphone Logic
+    // Only listen when the animation is done and candle is lit
+    const shouldListenToMic = hasAnimationCompleted && isCandleLit;
+    const { volume: micVolume, hasPermission: micPermission, requestAccess: requestMicAccess } = useMicInput(shouldListenToMic);
+
+    // Trigger blow candle if volume exceeds threshold
+    useEffect(() => {
+        if (shouldListenToMic && micVolume > 0.5) { // 0.5 is a reasonable threshold after normalization
+            blowCandle();
+        }
+    }, [micVolume, shouldListenToMic, blowCandle]);
+
+
     const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
@@ -54,13 +68,16 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
         if (hasStarted) return;
         setHasStarted(true);
 
+        // Request Mic Permission immediately on user interact
+        requestMicAccess();
+
         // Play Audio
         const audio = backgroundAudioRef.current;
         if (audio && audio.paused) {
             audio.currentTime = 0;
             void audio.play().catch(() => { });
         }
-    }, [hasStarted]);
+    }, [hasStarted, requestMicAccess]);
 
     // Trigger main animation sequence after typing is done (managed by UI usually, but triggered here)
     useEffect(() => {

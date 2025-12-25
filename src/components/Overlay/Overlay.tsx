@@ -49,16 +49,25 @@ export function Overlay() {
                 onClick={handleScreenClick}
                 style={{
                     opacity: backgroundOpacity,
-                    pointerEvents: backgroundOpacity > 0.1 || (isPlaying && isCandleLit) ? 'auto' : 'none',
-                    cursor: (isPlaying && isCandleLit) ? 'pointer' : 'default'
+                    // Ensure pointer events are active for the "tap to start" phase
+                    // BUT allow pass-through if the scene is playing so users can interact with cards/orbit
+                    pointerEvents: (!hasStarted || (isPlaying && isCandleLit)) ? 'auto' : 'none',
+                    cursor: (isPlaying && isCandleLit) ? 'pointer' : 'default',
+                    zIndex: 10 // Ensure it sits on top for the initial click
                 }}
             >
                 {!hasStarted && (
                     <div className="intro-wrapper">
                         <TypingIntro onComplete={() => setTypingDone(true)} />
-                        {typingDone && isMobile && (
-                            <div className="mobile-tap-hint">Tap to Open</div>
+                        {typingDone && (
+                            <div className="mobile-tap-hint">
+                                {isMobile ? "Tap to Open" : "Press [Space] or Click to Start"}
+                            </div>
                         )}
+                        {/* 
+                          Added invisible trigger layer for impatient users 
+                          or just to ensure the whole area is clickable 
+                        */}
                     </div>
                 )}
             </div>

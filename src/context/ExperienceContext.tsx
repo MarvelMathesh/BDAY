@@ -52,7 +52,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     // Microphone Logic
     // Only listen when the animation is done and candle is lit
     const shouldListenToMic = hasAnimationCompleted && isCandleLit;
-    const { volume: micVolume, hasPermission: micPermission, requestAccess: requestMicAccess } = useMicInput(shouldListenToMic);
+    const { volume: micVolume, requestAccess: requestMicAccess } = useMicInput(shouldListenToMic);
 
 
     const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
